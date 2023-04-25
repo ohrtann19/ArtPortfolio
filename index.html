@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="css/style.css">
+<title>Anna Ohrt's Art Portfolio</title>
+</head>
+<body>
+    <style>
+.container {
+  position: relative;
+  background-color: #fff;
+  padding: 50px;
+}
+
+.text {
+  position: absolute;
+  
+    }
+
+    #cane {
+        position: absolute;
+        /* z-index: 9999; */
+        transform-origin: center top;
+      }
+    #sightedRage {
+        /* z-index: 9999; */
+        position: absolute;
+        color:black;
+        top: 200px;
+        left: 200px;
+    }
+        
+    #sightedRage:focus {
+        /* z-index: 9999; */
+        color:red;
+    }
+    #trails {
+        position: absolute;
+        color:black;
+        top: 300px;
+        left: 1000px;
+    }
+    #performance {
+        position: absolute;
+        color:black;
+        top: 100px;
+        left: 500px;
+    }
+      body {
+        background-color: black;
+      }
+      
+      </style>
+    <!-- <div class="container"> -->
+        <div class="text">
+            <h2 id="sightedRage">
+                <a>Sighted Rage</a>
+                </h2>
+                <h2 id="trails"><a>Meaningless Trails</a></h2>
+                <h2 id="performance"><a>Failed Performance</a></h2>
+        </div>
+        <img src="cane.png" id="cane" alt="image of a white cane" />
+        <audio id="collision-sound" src="ratty.m4a"></audio>
+        <img src="black.jpg" id="hiddenText" alt="a safe space in a black square"/>
+
+    
+
+
+<script>
+
+
+let text = document.querySelector('#sightedRage');
+const follower = document.getElementById('cane');
+
+function checkCollision(text) {
+  const caneRect = follower.getBoundingClientRect();
+  const textRect = text.getBoundingClientRect();
+  if (caneRect.right >= textRect.left && caneRect.left <= textRect.right &&
+      caneRect.bottom >= textRect.top && caneRect.top <= textRect.bottom) {
+          if (text.id == 'sightedRage') {
+              console.log(text)
+                const sound = new Audio('./ratty.m4a');
+                text.style.color = 'red'
+                sound.play();
+          } else if (text.id == 'trails') {
+            const sound = new Audio('./softer.m4a');
+            text.style.color = 'green'
+            sound.play()
+          } else {
+            const sound = new Audio('./ratty.m4a');
+            
+              text.style.color = 'yellow'
+              sound.play();
+          }
+    
+    
+    setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance(text.textContent);
+        console.log(utterance)
+        synth.speak(utterance);
+}, 500);
+
+    
+  } else {
+      text.style.color = 'black'
+  }
+}
+
+setInterval(() => {
+    if (in_doc) {
+  checkCollision(document.querySelector('#sightedRage'));
+  checkCollision(document.querySelector('#trails'));
+  checkCollision(document.querySelector('#performance'));
+    }
+}, 1000);
+
+const synth = window.speechSynthesis;
+
+let collided = false;
+
+function playSound() {
+    const utterance = new SpeechSynthesisUtterance(text.textContent);
+    synth.speak(utterance);
+}
+
+// setInterval(() => {
+//     if (collided) {
+//     playSound();
+//     collided = false;
+//     }
+// }, 1000);
+let num_colisions = 0;
+let in_doc = false;
+document.addEventListener('mousemove', (event) => {
+  in_doc = true;
+  const x = event.clientX;
+  const y = event.clientY;
+  follower.style.left = x + 'px';
+  follower.style.top = y + 'px';
+  const followerRect = follower.getBoundingClientRect();
+  const textRect = text.getBoundingClientRect();
+
+  var rotation = (x / 2) * 0.7;
+
+  follower.style.transform = "translate(-85px, 10px) rotate(" + rotation + "deg) scale(0.3)";
+});
+</script>
+</body>
+    
+</html>
